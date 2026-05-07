@@ -15,7 +15,7 @@ A serverless CRUD todo list on AWS — FastAPI on Lambda, DynamoDB for data stor
      │ +JS                        │ /tasks
      │ +CSS                       │
      │                            │
-  ═══╪════════════════════════════╪═══════════════════════════════════════════ AWS (ap-southeast-2)
+  ═══╪════════════════════════════╪═════════════════════════════════ AWS (ap-southeast-2)
      ▼                            ▼
 ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
 │  S3              │    │  Lambda          │    │  DynamoDB        │
