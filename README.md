@@ -30,7 +30,7 @@ Three AWS services, glued together by Terraform:
 
 - **DynamoDB** — single table keyed on `task_id`, with a GSI on `user_id` so the API can list a user's tasks. Items expire after 24 hours via a `ttl` attribute.
 - **Lambda** — the API. FastAPI app wrapped with [Mangum](https://mangum.io/) to bridge API-Gateway-style events into ASGI. Function URL gives it a public HTTPS endpoint without needing API Gateway.
-- **S3** — hosts the static frontend (plain HTML/CSS/JS, no build step).
+- **S3** — hosts the static frontend (plain HTML/CSS/JS).
 
 ## Repository layout
 
@@ -103,7 +103,7 @@ Then re-run `terraform apply` — the file's MD5 changes, Terraform re-uploads i
   terraform apply
   ```
   Terraform sees the zip's hash changed and pushes the new code.
-- **Schema changes (DDB)** — be careful. Renaming `hash_key` forces a table replace, which destroys data. Plan first, always.
+- **Schema changes (DDB)** — Renaming `hash_key` forces a table replace, which destroys data.
 
 ## API reference
 
@@ -169,15 +169,14 @@ Response: `{"updated_task_id": "task_..."}`
 
 ### `DELETE /delete-task/{task_id}`
 
-Deletes a task. Idempotent — succeeds even if the task doesn't exist.
+Deletes a task. Succeeds even if the task doesn't exist.
 
 Response: `{"deleted_task_id": "task_..."}`
 
 ## Notes & caveats
 
 - **TTL is set to 24 hours.** Tasks vanish after a day. Adjust the `+ 86400` in `todo.py` if you want longer retention.
-- **No authentication.** Function URL is `authType: NONE` and the bucket policy is public-read. Fine for a demo or internal tool, not fine for production. Add Cognito or IAM auth before exposing this anywhere serious.
-- **CORS is wide open** (`*` origins, methods, headers) on the Function URL. Tighten this if you have a known frontend domain.
+- **No authentication.** Function URL is `authType: NONE` and the bucket policy is public-read. Fine for a demo or internal tool, not fine for production.
 - **The deprecation warning on `hash_key`/`range_key`** in the AWS provider is a known issue — the proposed `key_schema` replacement has worse bugs, so the provider team's current guidance is to ignore it.
 
 The bucket has `force_destroy = true` so it'll be emptied before deletion. DynamoDB items are deleted with the table.
