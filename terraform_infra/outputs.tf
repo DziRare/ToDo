@@ -7,3 +7,13 @@ output "table_name" {
   description = "DynamoDB table name."
   value       = aws_dynamodb_table.tasks.name
 }
+
+output "todo_site_url" {
+  description = "Public URL of the static website (S3 website endpoint)."
+  value       = "http://${aws_s3_bucket_website_configuration.website.website_endpoint}"
+}
+
+output "todo_site_bucket" {
+  description = "Name of the S3 bucket hosting the website."
+  value       = aws_s3_bucket.website.id
+}

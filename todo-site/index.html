@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todo</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>Tasks</h1>
+      <div class="user-pill">
+        <span>user:</span>
+        <button id="user-button" type="button"></button>
+      </div>
+    </header>
+
+    <div class="card">
+      <div id="error" class="error" style="display: none;"></div>
+
+      <form class="add-form" id="add-form">
+        <input
+          type="text"
+          id="new-task"
+          placeholder="Add a task..."
+          autocomplete="off"
+          required
+        />
+        <button type="submit" class="primary" id="add-btn">Add</button>
+      </form>
+
+      <div class="filters">
+        <button type="button" class="ghost active" data-filter="all">All</button>
+        <button type="button" class="ghost" data-filter="active">Active</button>
+        <button type="button" class="ghost" data-filter="done">Done</button>
+      </div>
+
+      <div id="tasks" class="tasks"></div>
+      <div id="empty" class="empty" style="display: none;">No tasks yet. Add one above.</div>
+      <div id="loading" class="empty loading" style="display: none;">Loading…</div>
+
+      <div class="status">
+        <span id="status-count">0 tasks</span>
+        <button type="button" class="ghost refresh-btn" id="refresh">Refresh</button>
+      </div>
+    </div>
+
+    <div class="ttl-note">
+      Tasks expire 24 hours after creation. Showing the 10 most recent.
+    </div>
+  </div>
+
+  <!-- User-id change modal -->
+  <div id="user-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal">
+      <h2>Switch user</h2>
+      <p>Tasks are scoped to a user id. Change it to see a different set of tasks.</p>
+      <input type="text" id="user-input" placeholder="user_id" />
+      <div class="modal-actions">
+        <button type="button" class="ghost" id="user-cancel">Cancel</button>
+        <button type="button" class="primary" id="user-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
