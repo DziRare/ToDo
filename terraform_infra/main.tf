@@ -35,11 +35,11 @@ resource "aws_dynamodb_table" "tasks" {
 
 # Lambda Function
 
-data "archive_file" "api_zip" {
-  type        = "zip"
-  source_dir  = var.api_source_path
-  output_path = "${path.module}/.build/api.zip"
-}
+# data "archive_file" "api_zip" {
+#   type        = "zip"
+#   source_dir  = var.api_source_path
+#   output_path = "${path.module}/.build/api.zip"
+# }
 
 # IAM role for the Lambda
 resource "aws_iam_role" "api" {
@@ -97,8 +97,8 @@ resource "aws_lambda_function" "api" {
   handler       = "todo.handler"
   runtime       = "python3.14"
 
-  filename         = data.archive_file.api_zip.output_path
-  source_code_hash = data.archive_file.api_zip.output_base64sha256
+  filename         = "${path.module}/${var.api_source_path}"
+  source_code_hash = filebase64sha256("${path.module}/${var.api_source_path}")
 
   environment {
     variables = {

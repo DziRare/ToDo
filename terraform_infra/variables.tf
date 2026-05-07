@@ -16,7 +16,7 @@ variable "api_source_path" {
     root. Must contain todo.py with a `handler` function.
   EOT
   type        = string
-  default     = "../api"
+  default     = "../api/lambda_function.zip"
 }
 
 variable "tags" {
