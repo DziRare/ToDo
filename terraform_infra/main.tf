@@ -29,15 +29,9 @@ resource "aws_dynamodb_table" "tasks" {
   }
 
   global_secondary_index {
-    name            = "user-index"
-    key_schema {
-      attribute_name = "user_id"
-      key_type = "HASH"
-    }
-    key_schema {
-      attribute_name = "created_time"
-      key_type = "RANGE"
-    }
+    name = "user-index"
+    hash_key = "user_id"
+    range_key = "created_time"
     projection_type = "ALL"
   }
 
@@ -135,4 +129,12 @@ resource "aws_lambda_function_url" "api" {
     allow_methods     = ["*"]
     allow_headers     = ["*"]
   }
+}
+
+resource "aws_lambda_permission" "api_url_public_invoke" {
+  statement_id           = "AllowPublicFunctionUrlInvoke"
+  action                 = "lambda:InvokeFunctionUrl"
+  function_name          = aws_lambda_function.api.function_name
+  principal              = "*"
+  function_url_auth_type = "NONE"
 }

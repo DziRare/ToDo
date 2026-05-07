@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "AWS region to deploy into."
   type        = string
-  default     = "us-east-1"
+  default     = "ap-southeast-2"
 }
 
 variable "project_name" {
@@ -13,8 +13,7 @@ variable "project_name" {
 variable "api_source_path" {
   description = <<-EOT
     Path to the Python Lambda source directory, relative to this Terraform
-    root. Must contain todo.py with a `handler` function. Matches the CDK
-    reference of "../api".
+    root. Must contain todo.py with a `handler` function.
   EOT
   type        = string
   default     = "../api"
