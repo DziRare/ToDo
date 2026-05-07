@@ -1,13 +1,3 @@
-###############################################################################
-# DynamoDB Table — stores tasks
-#
-# Mirrors the CDK ddb.Table construct:
-#   - PK: task_id (String)
-#   - PAY_PER_REQUEST billing
-#   - TTL on attribute "ttl"
-#   - GSI "user-index": PK user_id (String), SK created_time (Number)
-###############################################################################
-
 resource "aws_dynamodb_table" "tasks" {
   name         = "${var.project_name}-Tasks"
   billing_mode = "PAY_PER_REQUEST"
@@ -51,7 +41,7 @@ data "archive_file" "api_zip" {
   output_path = "${path.module}/.build/api.zip"
 }
 
-# IAM role for the Lambda (CDK creates this implicitly)
+# IAM role for the Lambda
 resource "aws_iam_role" "api" {
   name = "${var.project_name}-api-role"
 
@@ -72,7 +62,7 @@ resource "aws_iam_role_policy_attachment" "api_basic_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-# Equivalent of CDK's table.grantReadWriteData(api)
+# Grant read/write permissions
 resource "aws_iam_role_policy" "api_ddb_rw" {
   name = "${var.project_name}-api-ddb-rw"
   role = aws_iam_role.api.id
@@ -105,7 +95,7 @@ resource "aws_lambda_function" "api" {
   function_name = "${var.project_name}-API"
   role          = aws_iam_role.api.arn
   handler       = "todo.handler"
-  runtime       = "python3.9"
+  runtime       = "python3.14"
 
   filename         = data.archive_file.api_zip.output_path
   source_code_hash = data.archive_file.api_zip.output_base64sha256
